@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Queremos te conhecer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #1f1c2c, #928dab);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    #video-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      width: 100vw;
+      z-index: 1;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+    }
+
+    #logo-container {
+      position: absolute;
+      top: 20px;
+      width: 100%;
+      text-align: center;
+      z-index: 3;
+      display: none;
+    }
+
+    #logo-container img {
+      height: 35px;
+    }
+
+    .form-container {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: rgba(0, 0, 0, 0.8);
+      padding: 40px;
+      border-radius: 20px;
+      max-width: 600px;
+      width: 90%;
+      z-index: 2;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+      position: relative;
+    }
+
+    .progress-bar {
+      width: 100%;
+      background-color: #444;
+      border-radius: 10px;
+      height: 10px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .progress {
+      height: 100%;
+      width: 0%;
+      background-color: #4CAF50;
+      transition: width 0.4s ease-in-out;
+    }
+
+    .question {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      animation: fadeIn 0.5s ease;
+      text-align: center;
+    }
+
+    .question.active {
+      display: flex;
+    }
+
+    input, select {
+      padding: 12px;
+      font-size: 16px;
+      width: 100%;
+      max-width: 400px;
+      margin: 15px 0;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      padding: 12px 25px;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      margin: 10px;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #top-title, #bottom-text {
+      display: none;
+      z-index: 2;
+    }
+
+    #top-title {
+      font-size: 17px;
+      font-weight: 500;
+      margin-bottom: 20px;
+    }
+
+    #bottom-text {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    #loading-message {
+      display: none;
+      font-size: 18px;
+      margin-top: 20px;
+      color: #fff;
+      text-align: center;
+    }
+
+    .spinner {
+      border: 4px solid #fff;
+      border-top: 4px solid #4CAF50;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+      margin: 10px auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Logo -->
+  <div id="logo-container">
+    <img src="img/logo.png" alt="Logo">
+  </div>
+
+  <!-- Vídeo -->
+  <div id="video-container">
+    <iframe id="vimeo-video" src="https://player.vimeo.com/video/1075747227?autoplay=1&muted=1" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+  </div>
+
+  <!-- Título -->
+  <div id="top-title">O novo de Deus, está a uma decisão.</div>
+
+  <!-- Formulário -->
+  <div class="form-container" id="form-container">
+    <div class="progress-bar">
+      <div class="progress" id="progress-bar"></div>
+    </div>
+
+    <form id="multi-step-form">
+      <div class="question active">
+        <label>Qual seu nome?</label>
+        <input type="text" name="nome" required>
+      </div>
+
+      <div class="question">
+        <label>Idade:</label>
+        <input type="text" name="idade" required>
+      </div>
+
+      <div class="question">
+        <label>Número de celular:</label>
+        <input type="tel" name="celular" required>
+      </div>
+
+      <div class="question">
+        <label>Cidade:</label>
+        <select name="cidade" onchange="mostrarOutraCidade(this)">
+          <option value="">Selecione</option>
+          <option value="Araçatuba">Araçatuba</option>
+          <option value="Braúna">Braúna</option>
+          <option value="Birigui">Birigui</option>
+          <option value="Bilac">Bilac</option>
+          <option value="Buritama">Buritama</option>
+          <option value="Clementina">Clementina</option>
+          <option value="Guararapes">Guararapes</option>
+          <option value="Penápolis">Penápolis</option>
+          <option value="Presidente Prudente">Presidente Prudente</option>
+          <option value="Promissão">Promissão</option>
+          <option value="Valparaíso">Valparaíso</option>
+          <option value="Outra">Outra</option>
+        </select>
+        <input type="text" id="outra-cidade" name="outraCidade" placeholder="Digite sua cidade" style="display:none;">
+      </div>
+
+      <!-- Botões -->
+      <div style="margin-top: 20px;">
+        <button type="button" id="prevBtn">Voltar</button>
+        <button type="button" id="nextBtn">Próximo</button>
+        <button type="submit" id="submitBtn" style="display: none;">Enviar</button>
+      </div>
+    </form>
+
+    <!-- Loading -->
+    <div id="loading-message">
+      <div class="spinner"></div>
+      <p>Enviando...</p>
+    </div>
+  </div>
+
+  <!-- Texto abaixo -->
+  <div id="bottom-text">
+    <p>Queremos te conhecer melhor ❤️</p>
+  </div>
+
+  <script src="https://player.vimeo.com/api/player.js"></script>
+
+  <script>
+    const iframe = document.getElementById('vimeo-video');
+    const player = new Vimeo.Player(iframe);
+    const formContainer = document.getElementById('form-container');
+    const loadingMessage = document.getElementById('loading-message');
+
+    player.on('ended', function () {
+      document.getElementById('video-container').style.display = 'none';
+      formContainer.style.display = 'flex';
+      document.getElementById('logo-container').style.display = 'block';
+      document.getElementById('top-title').style.display = 'block';
+      document.getElementById('bottom-text').style.display = 'block';
+    });
+
+    const questions = document.querySelectorAll('.question');
+    const nextBtn = document.getElementById('nextBtn');
+    const prevBtn = document.getElementById('prevBtn');
+    const submitBtn = document.getElementById('submitBtn');
+    const progressBar = document.getElementById('progress-bar');
+    let currentStep = 0;
+
+    function showStep(index) {
+      questions.forEach((q, i) => q.classList.toggle('active', i === index));
+      prevBtn.style.display = index === 0 ? 'none' : 'inline-block';
+      nextBtn.style.display = index === questions.length - 1 ? 'none' : 'inline-block';
+      submitBtn.style.display = index === questions.length - 1 ? 'inline-block' : 'none';
+      updateProgress(index);
+      setTimeout(() => {
+        const activeInput = questions[index].querySelector('input, select');
+        if (activeInput) activeInput.focus();
+      }, 100);
+    }
+
+    function updateProgress(index) {
+      const percent = ((index + 1) / questions.length) * 100;
+      progressBar.style.width = percent + '%';
+    }
+
+    nextBtn.addEventListener('click', () => {
+      if (currentStep < questions.length - 1) {
+        currentStep++;
+        showStep(currentStep);
+      }
+    });
+
+    prevBtn.addEventListener('click', () => {
+      if (currentStep > 0) {
+        currentStep--;
+        showStep(currentStep);
+      }
+    });
+
+    function mostrarOutraCidade(select) {
+      const outraInput = document.getElementById('outra-cidade');
+      outraInput.style.display = select.value === 'Outra' ? 'block' : 'none';
+    }
+
+    document.getElementById('multi-step-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+
+      if (formData.get("cidade") === "Outra") {
+        formData.set("cidade", formData.get("outraCidade") || "Não informado");
+      }
+
+      // Oculta os campos e mostra o loading
+      this.style.display = 'none';
+      loadingMessage.style.display = 'block';
+
+      fetch('https://script.google.com/macros/s/AKfycbzbtlMoAiBqgte2btmVn5EWMFtWqKQyyPsiECqywRhjTQ0MmbtAMVeThHjP9N0PMX8X/exec', {
+        method: 'POST',
+        body: formData
+      }).then(response => {
+        formContainer.innerHTML = "<h2>Obrigado por responder! ❤️</h2>";
+        document.getElementById('bottom-text').style.display = 'none';
+        document.getElementById('top-title').style.display = 'none';
+      }).catch(error => {
+        alert('Erro ao enviar os dados.');
+        console.error(error);
+      });
+    });
+
+    showStep(currentStep);
+  </script>
+</body>
+</html>
